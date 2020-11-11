@@ -11,13 +11,13 @@ import {
 } from "react-router-dom";
 import './style2.css';
 
-const Header = ({isLoggedIn}) => {
+const Header = ({isAdmin}) => {
   return(
-    <>
+    <>  
     <ul className="header">
         <li><NavLink exact activeClassName="active" to="/">Home</NavLink></li>
         <li><NavLink activeClassName="active" to="/products">Products</NavLink></li>
-        {isLoggedIn && (
+        {isAdmin && (
         <>
         <li><NavLink activeClassName="active" to="/add-me">Add Me</NavLink></li>
         <li><NavLink activeClassName="active" to="/find-me">Find Me</NavLink></li>
@@ -29,7 +29,8 @@ const Header = ({isLoggedIn}) => {
         <hr />
         </>
   );
-}
+} 
+
 
 const Content = (props) => {
   return (
@@ -57,20 +58,11 @@ const Content = (props) => {
       </div>
   );
 }
-
 export default function BasicRoute(props) {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-   const handleRole = () => {
-     if (props.facade.getRole() === "admin")
-     setIsLoggedIn(true);
-   }
   return (
     <Router>
       <div>
-        <Header 
-        facade={props.facade}
-        isLoggedIn={isLoggedIn}
-        />
+        <Header isAdmin={props.isAdmin} />
         <Content renameMeFacade={props.renameMeFacade} />
       </div>
     </Router>

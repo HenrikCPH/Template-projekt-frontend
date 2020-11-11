@@ -2,7 +2,7 @@ import React, { useState,useEffect } from "react"
 import facade from "./apiFacade";
 import BasicRoute from './routes';
 
-function LogIn({ login }) {
+function LogIn({ login, setAdmin }) {
   const init = { username: "", password: "" };
   const [loginCredentials, setLoginCredentials] = useState(init);
  
@@ -43,20 +43,27 @@ function LoggedIn() {
 }
  
 function App(props) {
+  const [isAdmin, setAdmin] = useState(false);
   const [loggedIn, setLoggedIn] = useState(false)
  
   const logout = () => {facade.logout()
     setLoggedIn(false)} 
   const login = (user, pass) => {facade.login(user,pass)
-    .then(res =>setLoggedIn(true));
+    .then(res => {
+      setLoggedIn(true)
+      const decodedToken = JSON.parse(atob(facade.getToken().split('.')[1]));
+      const role = decodedToken.roles;
+      role === "admin" ? setAdmin(true) : setAdmin(false);
+      }
+    );
    } 
  
   return (
     <div>
-      {!loggedIn ? (<LogIn login={login} />) :
+      {!loggedIn ? (<LogIn login={login}/>) :
         (<div>
           <LoggedIn />
-          <BasicRoute renameMeFacade={props.renameMeFacade} facade={facade}/>
+          <BasicRoute renameMeFacade={props.renameMeFacade} isAdmin={isAdmin}/>
           <button onClick={logout}>Logout</button>
         </div>)}
     </div>
