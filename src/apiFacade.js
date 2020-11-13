@@ -1,4 +1,4 @@
-const URL = "http://localhost:8080/jpareststarter";
+import URL, {localURL, dropletURL} from './settings';
  
 function handleHttpErrors(res) {
  if (!res.ok) {
@@ -36,11 +36,11 @@ function apiFacade() {
     
 const urlFetchFromBackendRenameMe = () => {
     const options = makeOptions("GET",true); //True add's the token
-return fetch(URL + "/api/xxx/cheap", options).then(handleHttpErrors)}
+return fetch(localURL + "/api/xxx/cheap", options).then(handleHttpErrors)}
 
 const login = (user, password) => {
     const options = makeOptions("POST", true,{username: user, password: password});
-return fetch(URL + "/api/login", options)
+return fetch(localURL + "/api/login", options)
   .then(handleHttpErrors)
   .then(res => {
     //atob = ASCII to binary, den decoder base64 token. 
@@ -51,7 +51,7 @@ return fetch(URL + "/api/login", options)
   })}
 
 const fetchData = () => {const options = makeOptions("GET",true); //True add's the token
-return fetch(URL + "/api/info/" + getRole(), options).then(handleHttpErrors)}
+return fetch(localURL + "/api/info/" + getRole(), options).then(handleHttpErrors)}
 
 const makeOptions= (method,addToken,body) =>{
    var opts = {
