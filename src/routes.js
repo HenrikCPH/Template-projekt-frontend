@@ -9,6 +9,7 @@ import {
   useRouteMatch,
   useParams,
 } from "react-router-dom";
+import facade from "./apiFacade";
 import './style2.css';
 
 const Header = ({isAdmin}) => {
@@ -23,7 +24,7 @@ const Header = ({isAdmin}) => {
         <li><NavLink activeClassName="active" to="/find-me">Find Me</NavLink></li>
         </>
         )}
-        <li><NavLink activeClassName="active" to="/company">Company</NavLink></li>      
+        <li><NavLink activeClassName="active" to="/fetch-me">FetchMe</NavLink></li>      
     </ul>
 
         <hr />
@@ -42,8 +43,8 @@ const Content = (props) => {
           <Route path="/products">
             <Products renameMeFacade={props.renameMeFacade}/>
           </Route>
-          <Route path="/company">
-            <Company />
+          <Route path="/fetch-me">
+            <FetchMe data={props.data}/>
           </Route>
           <Route path="/add-me">
             <AddMe renameMeFacade={props.renameMeFacade}/>
@@ -63,7 +64,7 @@ export default function BasicRoute(props) {
     <Router>
       <div>
         <Header isAdmin={props.isAdmin} />
-        <Content renameMeFacade={props.renameMeFacade} />
+        <Content renameMeFacade={props.renameMeFacade} data={props.data}/>
       </div>
     </Router>
   );
@@ -73,6 +74,7 @@ function Home() {
   return (
     <div>
       <h2>Home</h2>
+      <h4>Der er en README fil til denne frontend i projekt mappen.</h4>
     </div>
   );
 }
@@ -152,10 +154,20 @@ function FindMe(props) {
   );
 } 
 
-function Company() {
+function FetchMe(props) {
+const mappedData = props.data.map((tag) =>
+<li key={tag.url}>
+  url: {tag.url} -  
+  div count: {tag.divCount} -
+  body count: {tag.bodyCount}
+</li>
+  )
+
   return (
     <div>
-      <h2>Company</h2>
+      <h2>FetchMe</h2>
+      <h3>Data Received from api:</h3>
+      {mappedData}
     </div>
   );
 }  

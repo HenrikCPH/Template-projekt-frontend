@@ -2,7 +2,7 @@ import React, { useState,useEffect } from "react"
 import facade from "./apiFacade";
 import BasicRoute from './routes';
 
-function LogIn({ login, setAdmin }) {
+function LogIn({ login}) {
   const init = { username: "", password: "" };
   const [loginCredentials, setLoginCredentials] = useState(init);
  
@@ -28,7 +28,7 @@ function LogIn({ login, setAdmin }) {
 }
 function LoggedIn() {
   const [dataFromServer, setDataFromServer] = useState("Loading...")
-  
+
   useEffect(() => {
     facade.fetchData().then(data=> setDataFromServer(data.msg));
   }, [])
@@ -40,12 +40,17 @@ function LoggedIn() {
     </div>
   )
  
-}
- 
+} 
+
 function App(props) {
   const [isAdmin, setAdmin] = useState(false);
-  const [loggedIn, setLoggedIn] = useState(false)
- 
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    facade.urlFetchFromBackendRenameMe().then(data=> setData(data.tags));
+  }, [])
+
   const logout = () => {facade.logout()
     setLoggedIn(false)} 
   const login = (user, pass) => {facade.login(user,pass)
@@ -57,13 +62,13 @@ function App(props) {
       }
     );
    } 
- 
+
   return (
     <div>
       {!loggedIn ? (<LogIn login={login}/>) :
         (<div>
           <LoggedIn />
-          <BasicRoute renameMeFacade={props.renameMeFacade} isAdmin={isAdmin}/>
+          <BasicRoute renameMeFacade={props.renameMeFacade} isAdmin={isAdmin} data={data}/>
           <button onClick={logout}>Logout</button>
         </div>)}
     </div>
